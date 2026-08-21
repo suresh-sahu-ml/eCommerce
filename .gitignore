@@ -1,7 +1,6 @@
 ﻿.gradle/
 .env
 .env.local
-.env.example
 build/
 dist/
 node_modules/
