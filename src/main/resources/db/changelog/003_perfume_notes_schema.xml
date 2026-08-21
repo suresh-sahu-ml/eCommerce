@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="003-create-perfume-note-sequence" author="architect">
+        <createSequence sequenceName="perfume_note_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="003-create-perfume-notes-table" author="architect">
+        <createTable tableName="perfume_notes">
+            <column name="note_id" type="number(19,0)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="note_name" type="varchar(100)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uk_note_name"/>
+            </column>
+            <column name="description" type="varchar(500)"/>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_date" type="timestamp"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Index on note_name automatically created by unique constraint -->
+
+
+</databaseChangeLog>

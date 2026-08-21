@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="005-create-cart-sequence" author="architect">
+        <createSequence sequenceName="cart_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="005-create-cart-table" author="architect">
+        <createTable tableName="cart">
+            <column name="cart_id" type="number(19,0)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="number(19,0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_date" type="timestamp"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="005-add-cart-fk-user" author="architect">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="cart"
+                                 constraintName="fk_cart_user"
+                                 referencedColumnNames="user_id" referencedTableName="users"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="005-create-cart-indexes" author="architect">
+        <createIndex indexName="idx_cart_user_id" tableName="cart">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

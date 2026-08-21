@@ -1,0 +1,80 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.1'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.perfumeshop'
+version = '1.0.0'
+sourceCompatibility = '21'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring Boot Web
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.4.1'
+
+    // Spring Boot Data JPA & ORM
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.4.1'
+    runtimeOnly 'org.hibernate.orm:hibernate-core:6.4.4.Final'
+
+    // Spring Validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation:3.4.1'
+
+    // Spring Mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail:3.4.1'
+
+    // Spring OAuth2 Resource Server
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server:3.4.1'
+
+    // Liquibase for database migrations
+    implementation 'org.liquibase:liquibase-core:4.27.0'
+
+    // Oracle JDBC driver
+    runtimeOnly 'com.oracle.database.jdbc:ojdbc11:23.3.0.23.09'
+
+    // Azure libraries
+    implementation 'com.azure:azure-identity:1.14.2'
+    implementation 'com.azure:azure-security-keyvault-secrets:4.8.3'
+    implementation 'com.azure:azure-core:1.49.1'
+
+    // Lombok for reducing boilerplate
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    // Jackson for JSON processing
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.0'
+
+    // JWT support
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.1'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.1'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.1'
+
+    // Razorpay Payment Gateway
+    implementation 'com.razorpay:razorpay-java:1.4.5'
+
+    // Apache Commons CSV for bulk product import
+    implementation 'org.apache.commons:commons-csv:1.11.0'
+
+    // DotEnv for loading .env files
+    implementation 'io.github.cdimascio:dotenv-java:3.0.0'
+
+    // Logging
+    implementation 'org.springframework.boot:spring-boot-starter-logging:3.4.1'
+
+    // Testing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.4.1'
+    testImplementation 'org.springframework.security:spring-security-test:6.2.1'
+    testImplementation 'junit:junit:4.13.2'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}

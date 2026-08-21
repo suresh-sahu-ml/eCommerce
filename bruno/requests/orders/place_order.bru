@@ -1,0 +1,45 @@
+meta {
+  name: Place Order
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/orders
+  body: json
+}
+
+headers {
+  Authorization: Bearer {{bearer_token}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "shippingAddress": "123 Luxury Avenue, Paris, France",
+    "orderItems": [
+      {
+        "productId": 1,
+        "quantity": 2
+      },
+      {
+        "productId": 2,
+        "quantity": 1
+      }
+    ]
+  }
+}
+
+tests {
+  test("Status is 201", function() {
+    expect(res.getStatus()).to.equal(201);
+  });
+
+  test("Response contains order number", function() {
+    expect(res.getBody()).to.have.property('orderNumber');
+  });
+
+  test("Total amount is positive", function() {
+    expect(res.getBody().totalAmount).to.be.greaterThan(0);
+  });
+}

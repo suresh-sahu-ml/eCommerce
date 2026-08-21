@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "The Perfume Shop API",
+  "uid": "perfume-shop-api",
+  "root": "bruno",
+  "settings": {},
+  "publicKey": "",
+  "environments": []
+}

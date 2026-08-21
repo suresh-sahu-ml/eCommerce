@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="007-create-order-sequence" author="architect">
+        <createSequence sequenceName="order_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="007-create-orders-table" author="architect">
+        <createTable tableName="orders">
+            <column name="order_id" type="number(19,0)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="order_number" type="varchar(50)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uk_order_number"/>
+            </column>
+            <column name="user_id" type="number(19,0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_amount" type="number(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="shipping_address" type="varchar(500)"/>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_date" type="timestamp"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="007-add-orders-fk-user" author="architect">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="orders"
+                                 constraintName="fk_orders_user"
+                                 referencedColumnNames="user_id" referencedTableName="users"/>
+    </changeSet>
+
+    <changeSet id="007-create-orders-indexes" author="architect">
+        <createIndex indexName="idx_order_user_id" tableName="orders">
+            <column name="user_id"/>
+        </createIndex>
+        <createIndex indexName="idx_order_status" tableName="orders">
+            <column name="status"/>
+        </createIndex>
+        <!-- Index on order_number automatically created by unique constraint -->
+    </changeSet>
+
+</databaseChangeLog>

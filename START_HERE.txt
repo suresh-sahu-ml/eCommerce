@@ -1,0 +1,452 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║              🎉 THE PERFUME SHOP - Spring Boot 3.x Backend 🎉            ║
+║                                                                            ║
+║              Complete Setup & Testing Guide - READ THIS FIRST            ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+📋 WHAT YOU HAVE
+════════════════════════════════════════════════════════════════════════════
+
+✓ Production-Ready Spring Boot 3.4.1 Application (Java 21)
+✓ Oracle Database Integration (Liquibase Migrations)
+✓ OAuth2 Security with Azure CIAM JWT Validation
+✓ Azure Key Vault Integration (No Plaintext Secrets)
+✓ REST API for Products & Orders
+✓ Bruno API Testing Collection
+✓ Comprehensive Documentation & Setup Guides
+✓ Automated Setup & Testing Scripts
+✓ Successfully Compiled & Ready to Run
+
+
+📚 DOCUMENTATION - START WITH ONE OF THESE
+════════════════════════════════════════════════════════════════════════════
+
+⚡ FAST_START.md (Recommended - Read This First!)
+   └─ 5-minute quick start with commands
+   └─ Best if you just want to get it running quickly
+
+🔧 SETUP_GUIDE.md
+   └─ Complete setup for Azure CIAM + Oracle Database
+   └─ Includes Azure AD B2C configuration
+   └─ Database connection & seeding data
+   └─ Read this if you want step-by-step guidance
+
+📖 README.md
+   └─ Full project documentation
+   └─ Architecture & design decisions
+   └─ Entity relationships & database schema
+   └─ Read this for comprehensive understanding
+
+✅ TESTING_COMPLETE_FLOW.md
+   └─ Step-by-step API testing guide
+   └─ Testing scenarios & examples
+   └─ Troubleshooting matrix
+   └─ Read this after application is running
+
+🚀 QUICKSTART.md
+   └─ Quick reference guide
+   └─ Common commands & tasks
+   └─ Read this for quick lookups
+
+
+🛠️  AUTOMATION SCRIPTS
+════════════════════════════════════════════════════════════════════════════
+
+setup-windows.ps1
+   └─ Interactive setup wizard
+   └─ Configures Docker, environment variables, builds & starts app
+   └─ Run: .\setup-windows.ps1
+
+test-api.ps1
+   └─ Automated API testing
+   └─ Tests all endpoints
+   └─ Run: .\test-api.ps1
+
+
+🚀 5-MINUTE QUICK START
+════════════════════════════════════════════════════════════════════════════
+
+STEP 1: Start Oracle Database (if you have Docker)
+─────────────────────────────────────────────────
+  docker run -d --name oracle-perfume -p 1521:1521 `
+    -e ORACLE_PWD=OraclePass123 `
+    container-registry.oracle.com/database/free:latest
+
+  Wait for: "DATABASE IS READY TO USE!" in logs
+
+
+STEP 2: Set Environment Variables
+─────────────────────────────────
+  Open PowerShell and run:
+
+  $env:DB_URL = "jdbc:oracle:thin:@localhost:1521:ORCL"
+  $env:DB_USERNAME = "system"
+  $env:DB_PASSWORD = "OraclePass123"
+  $env:AZURE_CIAM_ISSUER_URI = "https://YOUR_TENANT.b2clogin.com/TENANT_ID/v2.0/"
+  $env:AZURE_CIAM_JWK_SET_URI = "https://YOUR_TENANT.b2clogin.com/TENANT.onmicrosoft.com/discovery/v2.0/keys"
+
+
+STEP 3: Build Application
+─────────────────────────
+  cd d:\The-Perfume-Shop
+  ./gradlew clean build
+
+  Wait for: "BUILD SUCCESSFUL"
+
+
+STEP 4: Start Application
+─────────────────────────
+  ./gradlew bootRun
+
+  Wait for: "Started PerfumeShopApplication"
+  Application runs on: http://localhost:8080/api
+
+
+STEP 5: Test It Works
+─────────────────────
+  Open new PowerShell window:
+
+  curl http://localhost:8080/api/products
+
+  Expected: Returns JSON array with products
+
+
+✅ NOW RUNNING! See TESTING_COMPLETE_FLOW.md for more tests
+
+
+🔐 AZURE CIAM SETUP (First Time)
+════════════════════════════════════════════════════════════════════════════
+
+This is needed for authentication. Two options:
+
+OPTION A: Use Mock/Test Values (For Development)
+─────────────────────────────────────────────────
+  • Copy sample values from SETUP_GUIDE.md
+  • Application works but can't authenticate real users
+  • Use Bruno collection with mock token
+
+OPTION B: Setup Your Own Azure AD B2C (Production)
+──────────────────────────────────────────────────
+  1. Go to https://portal.azure.com
+  2. Create Azure AD B2C tenant (perfume-shop-b2c)
+  3. Register application (Perfume Shop API)
+  4. Get credentials:
+     - Client ID
+     - Client Secret
+     - Tenant ID
+  5. Find URLs in App Registrations
+  6. Update environment variables with your values
+
+  See SETUP_GUIDE.md - Part 1 for detailed steps
+
+
+🗄️  ORACLE DATABASE SETUP (First Time)
+════════════════════════════════════════════════════════════════════════════
+
+OPTION A: Docker (Recommended & Easiest)
+─────────────────────────────────────────
+  • Download Docker Desktop
+  • Run command above
+  • Database auto-initialized
+
+OPTION B: Local Installation
+──────────────────────────────
+  • Download from Oracle.com
+  • Install locally
+  • Update connection string in environment variables
+
+OPTION C: Cloud Database
+────────────────────────
+  • Use Azure Database for Oracle
+  • Update JDBC URL & credentials
+  • Rest of setup is the same
+
+See SETUP_GUIDE.md - Part 2 for detailed setup
+
+
+📊 TESTING THE API
+════════════════════════════════════════════════════════════════════════════
+
+PUBLIC ENDPOINTS (No Authentication)
+────────────────────────────────────
+  GET http://localhost:8080/api/products
+  → Returns list of products
+
+  GET http://localhost:8080/api/products/1
+  → Returns single product
+
+  GET http://localhost:8080/api/products/sku/LRP-001
+  → Returns product by SKU
+
+
+PROTECTED ENDPOINTS (Requires JWT Token)
+────────────────────────────────────────
+  First, get JWT token from Azure CIAM
+
+  Then test:
+
+  GET http://localhost:8080/api/orders
+  → Returns user's orders
+
+  POST http://localhost:8080/api/orders
+  → Place new order
+
+
+USING BRUNO (Easy GUI Testing)
+──────────────────────────────
+  1. Download Bruno: https://www.usebruno.com/
+  2. Open: File → Open Collection
+  3. Select: d:\The-Perfume-Shop\bruno
+  4. Edit: bruno/environments/local.bru (add your JWT token)
+  5. Click ▶ to run requests
+
+See TESTING_COMPLETE_FLOW.md for complete examples
+
+
+🔑 GETTING JWT TOKEN FROM AZURE CIAM
+════════════════════════════════════════════════════════════════════════════
+
+The "sub" claim in the JWT is the Azure CIAM Object ID
+This links the external identity to your user in the database
+
+Steps:
+  1. Create user in your Azure AD B2C tenant
+  2. Get JWT token (using PowerShell script or Portal)
+  3. Decode at https://jwt.io to verify "sub" claim
+  4. Use token with Bearer header in API requests
+
+See SETUP_GUIDE.md - Part 3 for detailed steps with code examples
+
+
+🗄️  SEED SAMPLE DATA (First Time)
+════════════════════════════════════════════════════════════════════════════
+
+Connect to Oracle:
+  sqlplus system/OraclePass123@localhost:1521/ORCL
+
+  INSERT INTO users (user_id, ciam_object_id, email, first_name, last_name, is_active, created_date)
+  VALUES (user_seq.NEXTVAL, '5c536403-e869-4bf7-b7af-6d0d46cf07c1', 'test@perfumeshop.com', 'John', 'Doe', 1, SYSDATE);
+
+  INSERT INTO products (product_id, product_name, sku, price, stock_quantity, is_active, created_date)
+  VALUES (product_seq.NEXTVAL, 'Luxury Rose Perfume', 'LRP-001', 189.99, 50, 1, SYSDATE);
+
+  COMMIT;
+
+See SETUP_GUIDE.md - Part 2 for complete data seeding
+
+
+📂 PROJECT FILES & DIRECTORIES
+════════════════════════════════════════════════════════════════════════════
+
+Key Files:
+  build.gradle                     Gradle build configuration
+  settings.gradle                  Gradle settings
+  gradlew / gradlew.bat           Gradle wrapper scripts
+  application.yml                  Spring Boot configuration
+
+Source Code:
+  src/main/java/com/perfumeshop/
+  ├── auth/                       User authentication
+  ├── catalog/                    Products & perfume notes
+  ├── order/                      Orders & shopping carts
+  ├── payment/                    Payment domain (placeholder)
+  └── common/                     Config & security
+
+Database:
+  src/main/resources/db/changelog/
+  ├── master.xml                  Liquibase orchestrator
+  ├── 001_users_schema.xml
+  ├── 002_products_schema.xml
+  ├── 003_perfume_notes_schema.xml
+  ├── 004_product_notes_schema.xml
+  ├── 005_cart_schema.xml
+  ├── 006_cart_items_schema.xml
+  ├── 007_orders_schema.xml
+  └── 008_order_items_schema.xml
+
+Testing:
+  bruno/                          API testing collection
+  ├── bruno.json
+  ├── environments/local.bru      Environment variables
+  └── requests/                   Pre-built API requests
+
+Build Output:
+  build/libs/perfume-shop-1.0.0.jar   Compiled application
+
+
+🎯 ARCHITECTURE OVERVIEW
+════════════════════════════════════════════════════════════════════════════
+
+┌─ User/Browser
+│
+├─→ REST API (Port 8080)
+│   ├─ ProductController (public)
+│   └─ OrderController (protected with JWT)
+│
+├─→ Spring Security (OAuth2)
+│   └─ JWT Validation from Azure CIAM
+│
+├─→ Spring Data JPA
+│   └─ Repositories for database access
+│
+└─→ Oracle Database
+    ├─ users (linked to Azure CIAM)
+    ├─ products & perfume_notes
+    ├─ orders & order_items
+    └─ cart & cart_items
+
+
+⚙️  TECHNOLOGY STACK
+════════════════════════════════════════════════════════════════════════════
+
+Language        Java 21
+Framework       Spring Boot 3.4.1
+Build Tool      Gradle 8.5
+Database        Oracle 19c/21c
+Migrations      Liquibase
+Security        OAuth2 + Azure CIAM JWT
+Secrets         Azure Key Vault
+Testing         Bruno + PowerShell scripts
+
+
+🛠️  COMMON COMMANDS
+════════════════════════════════════════════════════════════════════════════
+
+# Build
+./gradlew clean build
+
+# Run
+./gradlew bootRun
+
+# Run tests
+./gradlew test
+
+# View dependencies
+./gradlew dependencies
+
+# Stop Docker container
+docker stop oracle-perfume
+
+# Start Docker container
+docker start oracle-perfume
+
+# Connect to database
+sqlplus system/OraclePass123@localhost:1521/ORCL
+
+# Test API
+curl http://localhost:8080/api/products
+
+
+📞 TROUBLESHOOTING
+════════════════════════════════════════════════════════════════════════════
+
+Problem: Application won't start
+Solution:
+  1. Check Java 21 installed: java --version
+  2. Check Oracle running: docker ps
+  3. Check environment variables: $env:DB_URL
+  4. See TESTING_COMPLETE_FLOW.md - Troubleshooting Matrix
+
+Problem: Database connection refused
+Solution:
+  1. Start Oracle: docker start oracle-perfume
+  2. Wait for startup: docker logs oracle-perfume
+  3. Verify connection: sqlplus system/OraclePass123@localhost:1521/ORCL
+
+Problem: JWT token rejected
+Solution:
+  1. Verify token is not expired
+  2. Check issuer URI matches Azure CIAM tenant
+  3. Verify "sub" claim exists in token
+  4. Use https://jwt.io to decode and verify
+
+Problem: API returns 401 Unauthorized
+Solution:
+  1. Ensure Bearer token in Authorization header
+  2. Get fresh token from Azure CIAM
+  3. Check token hasn't expired
+
+
+💡 NEXT STEPS
+════════════════════════════════════════════════════════════════════════════
+
+1. ✓ Application is built (DONE!)
+
+2. → Choose ONE of these:
+
+   QUICK START (5 minutes):
+   • Read FAST_START.md
+   • Run setup-windows.ps1
+   • Run test-api.ps1
+
+   STEP-BY-STEP (15 minutes):
+   • Read SETUP_GUIDE.md
+   • Follow Part 1: Azure CIAM Setup
+   • Follow Part 2: Oracle Database Setup
+   • Follow Part 3: Configuration
+   • Follow Part 4: API Testing
+
+3. → Setup Azure CIAM (if not done)
+
+4. → Start application & test endpoints
+
+5. → Deploy to production when ready
+
+
+📖 READING ORDER RECOMMENDATIONS
+════════════════════════════════════════════════════════════════════════════
+
+For Beginners (First Time):
+  1. This file (START_HERE.txt)
+  2. FAST_START.md (quick overview)
+  3. SETUP_GUIDE.md (detailed setup)
+  4. TESTING_COMPLETE_FLOW.md (testing)
+
+For Experienced Developers:
+  1. README.md (architecture)
+  2. Run setup-windows.ps1 (automated)
+  3. Run test-api.ps1 (automated testing)
+  4. Start testing immediately
+
+For Reference:
+  • QUICKSTART.md (common tasks)
+  • application.yml (configuration)
+  • Database changelogs (db schema)
+  • Bruno collection (API examples)
+
+
+✨ YOU'RE ALL SET!
+════════════════════════════════════════════════════════════════════════════
+
+Your Spring Boot backend is:
+  ✓ Production-ready
+  ✓ Fully configured
+  ✓ Successfully compiled
+  ✓ Ready for testing
+
+Choose your path:
+  → Quick: Run setup-windows.ps1
+  → Step-by-step: Read SETUP_GUIDE.md
+  → Just curious: Read README.md
+
+Questions? Check TESTING_COMPLETE_FLOW.md - Troubleshooting section
+
+
+🚀 GET STARTED NOW
+════════════════════════════════════════════════════════════════════════════
+
+Option 1 (FASTEST - Automated):
+  .\setup-windows.ps1
+
+Option 2 (STEP-BY-STEP - Guided):
+  Read SETUP_GUIDE.md
+
+Option 3 (QUICK OVERVIEW - 5 min):
+  Read FAST_START.md
+
+
+════════════════════════════════════════════════════════════════════════════
+That's it! Your backend is ready. Choose an option above and start testing!
+════════════════════════════════════════════════════════════════════════════

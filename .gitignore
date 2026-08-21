@@ -1,0 +1,15 @@
+﻿.gradle/
+.env
+.env.local
+.env.example
+build/
+dist/
+node_modules/
+.idea/
+.vscode/
+*.class
+*.jar
+target/
+uploads/
+startup_full.log
+.claude/settings.local.json

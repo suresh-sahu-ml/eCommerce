@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <include file="db/changelog/001_users_schema.xml"/>
+    <include file="db/changelog/002_products_schema.xml"/>
+    <include file="db/changelog/003_perfume_notes_schema.xml"/>
+    <include file="db/changelog/004_product_notes_schema.xml"/>
+    <include file="db/changelog/005_cart_schema.xml"/>
+    <include file="db/changelog/006_cart_items_schema.xml"/>
+    <include file="db/changelog/007_orders_schema.xml"/>
+    <include file="db/changelog/008_order_items_schema.xml"/>
+
+</databaseChangeLog>

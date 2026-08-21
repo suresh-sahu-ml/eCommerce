@@ -1,0 +1,25 @@
+meta {
+  name: Get All Products
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/products
+  body: none
+}
+
+query {
+  page: 0
+  size: 10
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response contains products", function() {
+    expect(res.getBody()).to.have.property('content');
+  });
+}

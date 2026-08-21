@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="006-create-cart-item-sequence" author="architect">
+        <createSequence sequenceName="cart_item_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="006-create-cart-items-table" author="architect">
+        <createTable tableName="cart_items">
+            <column name="cart_item_id" type="number(19,0)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cart_id" type="number(19,0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="number(19,0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="number(10,0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_date" type="timestamp"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="006-add-cart-items-fk-cart" author="architect">
+        <addForeignKeyConstraint baseColumnNames="cart_id" baseTableName="cart_items"
+                                 constraintName="fk_cart_items_cart"
+                                 referencedColumnNames="cart_id" referencedTableName="cart"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="006-add-cart-items-fk-product" author="architect">
+        <addForeignKeyConstraint baseColumnNames="product_id" baseTableName="cart_items"
+                                 constraintName="fk_cart_items_product"
+                                 referencedColumnNames="product_id" referencedTableName="products"/>
+    </changeSet>
+
+    <changeSet id="006-create-cart-items-indexes" author="architect">
+        <createIndex indexName="idx_cart_item_cart_id" tableName="cart_items">
+            <column name="cart_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

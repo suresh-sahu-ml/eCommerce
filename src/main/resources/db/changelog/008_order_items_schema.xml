@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="008-create-order-item-sequence" author="architect">
+        <createSequence sequenceName="order_item_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="008-create-order-items-table" author="architect">
+        <createTable tableName="order_items">
+            <column name="order_item_id" type="number(19,0)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="order_id" type="number(19,0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="number(19,0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="number(10,0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unit_price" type="number(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="line_total" type="number(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_date" type="timestamp"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="008-add-order-items-fk-order" author="architect">
+        <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="order_items"
+                                 constraintName="fk_order_items_order"
+                                 referencedColumnNames="order_id" referencedTableName="orders"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="008-add-order-items-fk-product" author="architect">
+        <addForeignKeyConstraint baseColumnNames="product_id" baseTableName="order_items"
+                                 constraintName="fk_order_items_product"
+                                 referencedColumnNames="product_id" referencedTableName="products"/>
+    </changeSet>
+
+    <changeSet id="008-create-order-items-indexes" author="architect">
+        <createIndex indexName="idx_order_item_order_id" tableName="order_items">
+            <column name="order_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

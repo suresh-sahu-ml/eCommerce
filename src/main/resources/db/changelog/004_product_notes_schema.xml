@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="004-create-product-notes-table" author="architect">
+        <createTable tableName="product_notes">
+            <column name="product_id" type="number(19,0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="note_id" type="number(19,0)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="004-add-product-notes-pk" author="architect">
+        <addPrimaryKey columnNames="product_id,note_id" tableName="product_notes"/>
+    </changeSet>
+
+    <changeSet id="004-add-product-notes-fk-product" author="architect">
+        <addForeignKeyConstraint baseColumnNames="product_id" baseTableName="product_notes"
+                                 constraintName="fk_product_notes_product"
+                                 referencedColumnNames="product_id" referencedTableName="products"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="004-add-product-notes-fk-note" author="architect">
+        <addForeignKeyConstraint baseColumnNames="note_id" baseTableName="product_notes"
+                                 constraintName="fk_product_notes_note"
+                                 referencedColumnNames="note_id" referencedTableName="perfume_notes"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+</databaseChangeLog>

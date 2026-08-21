@@ -1,0 +1,20 @@
+meta {
+  name: Get Order by Number
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{base_url}}/orders/ORD-1724575707000
+  body: none
+}
+
+headers {
+  Authorization: Bearer {{bearer_token}}
+}
+
+tests {
+  test("Status is 200 or 404", function() {
+    expect(res.getStatus()).to.be.oneOf([200, 404]);
+  });
+}

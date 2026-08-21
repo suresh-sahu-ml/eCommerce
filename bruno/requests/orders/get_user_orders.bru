@@ -1,0 +1,24 @@
+meta {
+  name: Get User Orders
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{base_url}}/orders
+  body: none
+}
+
+headers {
+  Authorization: Bearer {{bearer_token}}
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response is an array", function() {
+    expect(res.getBody()).to.be.an('array');
+  });
+}
