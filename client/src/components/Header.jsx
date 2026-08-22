@@ -9,6 +9,7 @@ export default function Header({ scrolled, activePage = null }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const checkAuth = () => {
@@ -95,6 +96,20 @@ export default function Header({ scrolled, activePage = null }) {
     navigate('/');
   };
 
+  const handleSearch = (e) => {
+    if (e.key === 'Enter' && searchTerm.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+      setSearchTerm('');
+    }
+  };
+
+  const handleSearchClick = () => {
+    if (searchTerm.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+      setSearchTerm('');
+    }
+  };
+
   return (
     <header
       className={`fixed top-0 w-full z-50 transition-all duration-500 ease-in-out ${
@@ -169,12 +184,24 @@ export default function Header({ scrolled, activePage = null }) {
         {/* Right Navigation */}
         <div className="flex-1 flex items-center justify-end gap-6 sm:gap-8 md:gap-12">
           {/* Search Bar */}
-          <div className="hidden sm:flex items-center">
+          <div className="hidden sm:flex items-center gap-2">
             <input
               type="text"
-              placeholder="Search"
-              className="bg-neutral-200 px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              placeholder="Search products..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleSearch}
+              className="bg-neutral-200 px-4 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary transition-all w-40 md:w-48"
             />
+            <button
+              onClick={handleSearchClick}
+              className="flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity"
+              title="Search"
+            >
+              <span className="material-symbols-outlined text-on-surface-variant hover:text-on-surface">
+                search
+              </span>
+            </button>
           </div>
 
           {/* Wishlist - Only for non-admin users */}

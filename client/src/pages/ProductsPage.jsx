@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ProductIntro from '../components/Products/ProductIntro';
@@ -7,6 +8,8 @@ import ProductGrid from '../components/Products/ProductGrid';
 import Pagination from '../components/Products/Pagination';
 
 export default function ProductsPage() {
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get('search') || '';
   const [scrolled, setScrolled] = useState(false);
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -68,6 +71,16 @@ export default function ProductsPage() {
   const filteredProducts = useMemo(() => {
     let result = allProducts;
 
+    // Apply search filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(p =>
+        p.name.toLowerCase().includes(query) ||
+        p.house.toLowerCase().includes(query) ||
+        p.family.toLowerCase().includes(query)
+      );
+    }
+
     // Apply house filter
     if (selectedHouses.length > 0) {
       result = result.filter(p => selectedHouses.includes(p.house));
@@ -96,14 +109,30 @@ export default function ProductsPage() {
     }
 
     return result;
-  }, [allProducts, selectedHouses, selectedFamilies, sortBy]);
+  }, [allProducts, searchQuery, selectedHouses, selectedFamilies, sortBy]);
 
   return (
     <div className="bg-surface font-body-md text-on-surface">
       <Header scrolled={scrolled} activePage="products" />
       <main className="w-full pt-20 bg-surface">
         <div className="flex flex-col w-full">
-          <ProductIntro />
+          {searchQuery ? (
+            <section className="w-full px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-12">
+              <div className="max-w-7xl mx-auto">
+                <h1 className="font-display-md text-display-md text-primary mb-2">
+                  Search Results
+                </h1>
+                <p className="font-body-md text-on-surface-variant mb-2">
+                  Searching for: <span className="font-label-sm text-primary">"{searchQuery}"</span>
+                </p>
+                <p className="font-body-sm text-on-surface-variant">
+                  Found {filteredProducts.length} product{filteredProducts.length !== 1 ? 's' : ''}
+                </p>
+              </div>
+            </section>
+          ) : (
+            <ProductIntro />
+          )}
 
           <div className="w-full px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 flex justify-center pb-section-gap">
             <div className="max-w-7xl w-full flex gap-12">
@@ -125,7 +154,9 @@ export default function ProductsPage() {
                   <div className="text-center py-12">Loading products...</div>
                 ) : filteredProducts.length === 0 ? (
                   <div className="text-center py-12 text-on-surface-variant">
-                    No products found with the selected filters.
+                    {searchQuery
+                      ? `No products found matching "${searchQuery}". Try a different search term.`
+                      : 'No products found with the selected filters.'}
                   </div>
                 ) : (
                   <ProductGrid products={filteredProducts} />
